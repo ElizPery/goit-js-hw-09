@@ -1,5 +1,6 @@
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
+import Notiflix from 'notiflix';
 
 const refs = {
     startBtn: document.querySelector('[data-start]'),
@@ -27,7 +28,7 @@ const options = {
       differenceTime = selectedTime - currentTime;
 
       if (differenceTime < 0) {
-        window.alert("Please choose a date in the future");
+        Notiflix.Notify.failure("Please choose a date in the future");
       } else {
         refs.startBtn.removeAttribute('disabled', true);
       }
@@ -55,20 +56,26 @@ function addLeadingZero(value) {
 }
 
 function onStartBtnClick() {
-    refs.startBtn.setAttribute('disabled', true);
 
-    timerId = setInterval(() => {
-        const convertDifferenceData = convertMs(differenceTime);
-        const values = Object.values(convertDifferenceData);
-        refs.dataInfo.textContent = values[0];
-        refs.hoursInfo.textContent = values[1];
-        refs.minutesInfo.textContent = values[2];
-        refs.secondsInfo.textContent = values[3];
-        differenceTime -= 1000;
-        if (differenceTime < 0) {
-            refs.secondsInfo.textContent = '00';
-            clearInterval(timerId);
-            refs.startBtn.removeAttribute('disabled', true);
-        }
-    }, 1000)
+  refs.startBtn.setAttribute('disabled', true);
+  visualTranslateData();
+  
+  timerId = setInterval(() => {
+    differenceTime -= 1000;
+    visualTranslateData();
+    if (differenceTime < 0) {
+        refs.secondsInfo.textContent = '00';
+        clearInterval(timerId);
+        refs.startBtn.removeAttribute('disabled', true);
+    }
+  }, 1000)
+}
+
+function visualTranslateData() {
+  const convertDifferenceData = convertMs(differenceTime);
+  const values = Object.values(convertDifferenceData);
+  refs.dataInfo.textContent = values[0];
+  refs.hoursInfo.textContent = values[1];
+  refs.minutesInfo.textContent = values[2];
+  refs.secondsInfo.textContent = values[3];
 }
