@@ -7,7 +7,7 @@ refs.startBtn.addEventListener('click', onStartClick);
 refs.stopBtn.addEventListener('click', onStopClick);
 
 refs.stopBtn.disabled = true;
-timerId = null;
+let timerId = null;
 
 function getRandomHexColor() {
   return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
